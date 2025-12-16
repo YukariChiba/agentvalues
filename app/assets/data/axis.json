@@ -1,0 +1,38 @@
+{
+  "S": {
+    "title": "社交偏好",
+    "left": "独狼行动",
+    "right": "社群协作",
+    "leftcolor": "#90a4ae",
+    "rightcolor": "#ffab00",
+    "lefticon": "mdi-account",
+    "righticon": "mdi-account-group"
+  },
+  "F": {
+    "title": "阵营倾向",
+    "left": "反抗军",
+    "right": "启蒙军",
+    "leftcolor": "#00d8ff",
+    "rightcolor": "#03fe03",
+    "lefticon": "mdi-shield-home",
+    "righticon": "mdi-eye"
+  },
+  "A": {
+    "title": "成就动机",
+    "left": "生活体验",
+    "right": "游戏数据",
+    "leftcolor": "#00e5ff",
+    "rightcolor": "#7c4dff",
+    "lefticon": "mdi-compass-outline",
+    "righticon": "mdi-chart-box"
+  },
+  "C": {
+    "title": "对抗强度",
+    "left": "和平互动",
+    "right": "激烈对抗",
+    "leftcolor": "#80cbc4",
+    "rightcolor": "#ff5252",
+    "lefticon": "mdi-handshake",
+    "righticon": "mdi-sword-cross"
+  }
+}

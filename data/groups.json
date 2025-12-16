@@ -1,0 +1,22 @@
+[
+  {
+    "title": "阵营倾向 (游戏设定)",
+    "data": "1-alignment"
+  },
+  {
+    "title": "游戏行为",
+    "data": "2-gameplay"
+  },
+  {
+    "title": "社会价值",
+    "data": "3-society"
+  },
+  {
+    "title": "生活方式",
+    "data": "4-lifestyle"
+  },
+  {
+    "title": "个性特点",
+    "data": "5-personality"
+  }
+]
