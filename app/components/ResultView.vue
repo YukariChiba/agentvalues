@@ -118,7 +118,7 @@
                         <div class="d-flex flex-column">
                             <ResultBar
                                 v-for="(stat, key) in results.filter(
-                                    (x) => x.id !== 'F',
+                                    (x) => x.id !== 'F' && x.id !== 'M',
                                 )"
                                 :key="key"
                                 :stats="stat"
@@ -135,6 +135,54 @@
                     <v-divider />
                     <div class="d-flex flex-column align-center">
                         <GlyphDisplay :glyphs="axisData.glyph" />
+                    </div>
+                </v-card>
+            </v-col>
+
+            <v-col cols="12">
+                <v-card
+                    :rounded="mobile ? 'lg' : 'xl'"
+                    :elevation="mobile ? 0 : 4"
+                    variant="elevated"
+                    class="pa-6 result-card d-flex flex-column"
+                >
+                    <div class="d-flex align-center mb-6">
+                        <v-icon icon="mdi-virus" color="red" class="mr-3" />
+                        <span class="text-h6 font-weight-bold"
+                            >Machina 混乱指数</span
+                        >
+                        <v-spacer />
+                        <span class="text-h6 font-mono text-red"
+                            >{{ machinaScore }}%</span
+                        >
+                    </div>
+
+                    <div>
+                        <div class="text-center mb-6 text-md-left">
+                            <div
+                                class="text-h5 font-weight-bold mb-2"
+                                :class="`text-${machinaData.color}`"
+                            >
+                                {{ machinaData.title }}
+                            </div>
+                            <div
+                                class="text-caption text-medium-emphasis text-uppercase"
+                            >
+                                熵值等级
+                            </div>
+                        </div>
+                        <v-alert
+                            class="mb-4 text-body-2 font-italic"
+                            border="start"
+                            :border-color="machinaData.color"
+                            variant="tonal"
+                            density="compact"
+                        >
+                            "{{ machinaData.quote }}"
+                        </v-alert>
+                        <p class="text-medium-emphasis">
+                            {{ machinaData.description }}
+                        </p>
                     </div>
                 </v-card>
             </v-col>
@@ -163,25 +211,32 @@
         </v-alert>
         <div class="d-flex justify-center mt-6 gap-4">
             <v-btn
+                size="large"
+                class="mx-2"
+                rounded="pill"
+                color="grey"
+                prepend-icon="mdi-text-box-search"
+                text="参考数据"
+                to="/reference"
+            />
+            <v-btn
                 class="mx-2"
                 rounded="pill"
                 size="large"
                 color="secondary"
                 prepend-icon="mdi-share-variant"
+                text="分享结果"
                 @click="share"
-            >
-                分享结果
-            </v-btn>
+            />
             <v-btn
                 class="mx-2"
                 size="large"
                 color="primary"
                 rounded="pill"
                 prepend-icon="mdi-refresh"
+                text="重启测试"
                 @click="redo"
-            >
-                重启测试
-            </v-btn>
+            />
         </div>
     </v-container>
 </template>
@@ -195,9 +250,12 @@ import type {
     AlignmentResults,
     AxisResult,
     AlignmentKey,
+    MachinaResults,
+    MachinaResult,
 } from "~/types/quiz";
 import alResRaw from "~/assets/data/result-alignment.json";
 import axResRaw from "~/assets/data/result-axis.json";
+import maResRaw from "~/assets/data/result-machina.json";
 
 const { mobile } = useDisplay();
 const dataStore = useDataStore();
@@ -207,6 +265,18 @@ const route = useRoute();
 const results = dataStore.scoresToAxisStats(route.query);
 
 const { totalQuestions } = dataStore;
+
+const machinaScore = computed(() => {
+    return parseInt((route.query.M as string) || "0");
+});
+
+const machinaData = computed<MachinaResult>(() => {
+    const s = machinaScore.value;
+    const raw = maResRaw as MachinaResults;
+    if (s < 33) return raw.low;
+    if (s < 66) return raw.mid;
+    return raw.high;
+});
 
 const alignmentCode = computed(() => {
     const f = results.find((x) => x.id === "F")?.sign;
@@ -250,7 +320,7 @@ const axisData = computed<AxisResult>(() => {
 const share = async () => {
     const shareData = {
         title: `AgentValues 立场测试结果：${axisData.value.title}`,
-        text: `我的 Ingress 阵营立场是：${alignmentData.value.title} \n 我的 Ingress 行为特点是：${axisData.value.title}。`,
+        text: `我的 Ingress 阵营立场是：${alignmentData.value.title} \n 我的 Ingress 行为特点是：${axisData.value.title} \n 我的 Machina 混乱指数是：${machinaScore.value}% (${machinaData.value.title})。`,
         url: window.location.href,
     };
 

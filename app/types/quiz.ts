@@ -25,3 +25,16 @@ export interface AxisStat {
     percent: number;
     id: string;
 }
+
+export interface MachinaResult {
+    title: string;
+    description: string;
+    quote: string;
+    color: string;
+}
+
+export interface MachinaResults {
+    low: MachinaResult;
+    mid: MachinaResult;
+    high: MachinaResult;
+}

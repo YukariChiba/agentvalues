@@ -38,9 +38,19 @@
             >
                 点击开始
             </v-btn>
+            <div>
+                <v-btn
+                    size="small"
+                    class="mt-2"
+                    variant="text"
+                    prepend-icon="mdi-text-box-search"
+                    text="参考数据"
+                    to="/reference"
+                />
+            </div>
         </v-card>
         <v-card class="pa-8" max-width="600" variant="plain">
-            Made by @YukariChiba / v0.1.1 Beta
+            Made by @YukariChiba / v0.1.5 Beta
         </v-card>
     </v-container>
 </template>

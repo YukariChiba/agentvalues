@@ -58,16 +58,40 @@ export const useQuizStore = defineStore("quiz", () => {
 
   const scores = computed(() => {
     const scores: Record<string, number> = {};
+    const axisStats: Record<string, { sumAbs: number; netSum: number }> = {};
 
-    // Calculate raw scores
+    // Calculate raw scores and Machina stats
     dataStore.questions.forEach((g) => {
       g.data.forEach((q) => {
         const ans = answers.value[q.id] || 0;
+        
         Object.entries(q.weights).forEach(([axis, weight]) => {
-          scores[axis] = (scores[axis] || 0) + weight * ans;
+          const weightedVal = weight * ans;
+          
+          if (!axisStats[axis]) axisStats[axis] = { sumAbs: 0, netSum: 0 };
+          
+          scores[axis] = (scores[axis] || 0) + weightedVal;
+          
+          axisStats[axis].sumAbs += Math.abs(weightedVal);
+          axisStats[axis].netSum += weightedVal;
         });
       });
     });
+    
+    let totalDissipation = 0;
+    let totalEnergy = 0;
+
+    Object.values(axisStats).forEach((stat) => {
+      const absNet = Math.abs(stat.netSum);
+      totalDissipation += (stat.sumAbs - absNet);
+      totalEnergy += stat.sumAbs;
+    });
+
+    if (totalEnergy > 0) {
+      scores["M"] = Math.round((totalDissipation / totalEnergy) * 100);
+    } else {
+      scores["M"] = 0;
+    }
 
     return scores;
   });

@@ -9,6 +9,6 @@ import type { LocationQuery } from "vue-router";
 const route = useRoute();
 
 const isResultQuery = (q: LocationQuery) => {
-    return !!q.S && !!q.C && !!q.A && !!q.F;
+    return !!q.S && !!q.C && !!q.A && !!q.F && !!q.M;
 };
 </script>
